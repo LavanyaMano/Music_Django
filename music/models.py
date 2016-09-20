@@ -15,6 +15,7 @@ class Track(models.Model):
     name = models.CharField(max_length=100)
     artists = models.ManyToManyField('Artist',blank=True)
     genres = models.ManyToManyField('Genre',blank=True)
+    track_type = models.ManyToManyField('TrackType')
 
     class Meta:
         ordering = ['name',]
@@ -66,7 +67,12 @@ class Genre(models.Model):
     def __str__(self):
         return "{}, {}".format(self.name,self.category)
 
-
-        
+class TrackType(models.Model):
+    AUDIO = 'audio'
+    VIDEO = 'video'
+    CATEGORY_CHOICES = ((AUDIO,'Audio'),(VIDEO,'Video'))
+    category = models.CharField(max_length=10,default=AUDIO,choices=CATEGORY_CHOICES)
+    def __str__(self):
+        return self.category
 
 

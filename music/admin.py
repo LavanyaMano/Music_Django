@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Album, Track, Artist, Genre
+from .models import Album, Track, Artist, Genre,TrackType
 
 class AlbumAdmin(admin.ModelAdmin):
     
@@ -19,7 +19,7 @@ class AlbumInline(admin.StackedInline):
 class TrackAdmin(admin.ModelAdmin):
     
     search_fields = ['name','artists__name','album__name']
-    list_display = ['name','artist_names','album_names']
+    list_display = ['name','album_names','artist_names','ttype']
 
     def artist_names(self,obj):
         names = [artist.name for artist in obj.artists.all()]
@@ -32,6 +32,12 @@ class TrackAdmin(admin.ModelAdmin):
         return ", ".join(names)
 
     album_names.short_description = 'Album'
+
+    def ttype(self,obj):
+        names = [t.category for t in obj.track_type.all()]
+        return ", ".join(names)
+
+    ttype.short_description = 'TrackType'
 
 class TrackInline(admin.StackedInline):
     model = Track.artists.through
@@ -51,3 +57,4 @@ admin.site.register(Album, AlbumAdmin)
 admin.site.register(Track, TrackAdmin) 
 admin.site.register(Artist, ArtistAdmin) 
 admin.site.register(Genre, GenreAdmin) 
+admin.site.register(TrackType)
